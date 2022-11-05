@@ -1,0 +1,179 @@
+﻿<Window x:Class="MariaTest.DispatcherWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MariaTest"
+        xmlns:ViewModels="clr-namespace:MariaTest.ViewModels"
+        xmlns:Converters="clr-namespace:MariaTest.Converters"
+        mc:Ignorable="d"
+        Title="DispatcherWindow" Height="450" Width="800">
+    
+    <Window.DataContext>
+        <ViewModels:DispatcherViewModel/>
+    </Window.DataContext>
+    
+    <Window.Resources>
+        <Converters:SelectedBidToVisibilityConverter x:Key="SelectedBidToVisibilityConverter"/>
+        <Converters:BidMeasurementPlanToStringConverter x:Key="BidMeasurementPlanToStringConverter"/>
+        <Converters:MeasurementPlanToVisibilityConverter x:Key="MeasurementPlanToVisibilityConverter"/>
+        <Converters:NewMeasurementPlanToVisibilityConverter x:Key="NewMeasurementPlanToVisibilityConverter"/>
+        <Converters:MeasurementPlansToVisibilityHiddenConverter x:Key="MeasurementPlansToVisibilityHiddenConverter"/>
+        <Converters:MeasurementPlansToVisibilityVisibleConverter x:Key="MeasurementPlansToVisibilityVisibleConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Grid.Row="0">
+            <TextBlock FontSize="24" 
+                       Text="Рабочее место диспетчера по замерам"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical"
+                    Grid.Row="1"
+                    Visibility="{Binding SelectBid, Converter={StaticResource SelectedBidToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+            <StackPanel Orientation="Horizontal"
+                        Height="50"
+                        DataContext="{Binding SelectBid}">
+                <StackPanel Width="20"
+                        Margin="10,0,0,0">
+                    <TextBlock Text="№"
+                           Height="20"/>
+                    <TextBox Text="{Binding Id}"
+                         Height="20"
+                         IsReadOnly="True"/>
+                </StackPanel>
+                <StackPanel Width="100"
+                        Margin="10,0,0,0">
+                    <TextBlock Text="ФИО"
+                           Height="20"/>
+                    <TextBox Text="{Binding FullName}" 
+                         Height="20" 
+                         IsReadOnly="True"/>
+                </StackPanel>
+                <StackPanel Width="110"
+                        Margin="10,0,0,0">
+                    <TextBlock Text="Телефон"
+                           Height="20"/>
+                    <TextBox Text="{Binding Phone}"
+                         Height="20"
+                         IsReadOnly="True"/>
+                </StackPanel>
+                <StackPanel Width="80"
+                        Margin="10,0,0,0">
+                    <TextBlock Text="Город"
+                           Height="20"/>
+                    <TextBox Text="{Binding City}"
+                         Height="20"
+                         IsReadOnly="True"/>
+                </StackPanel>
+                <StackPanel Width="180"
+                        Margin="10,0,0,0">
+                    <TextBlock Text="Адрес"
+                           Height="20"/>
+                    <TextBox Text="{Binding Address}"
+                         Height="20"
+                         IsReadOnly="True"/>
+                </StackPanel>
+                <StackPanel Width="120"
+                        Margin="10,0,0,0">
+                    <TextBlock Text="Дата и время замера"
+                           Height="20"/>
+                    <TextBox Text="{Binding MeasurementPlan, Converter={StaticResource BidMeasurementPlanToStringConverter}}"
+                         Height="20"
+                         IsReadOnly="True"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        Height="50">
+                <StackPanel Width="180"
+                        Margin="10,0,0,0">
+                    <TextBlock Text="Новая дата и время замера"
+                           Height="20"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <ComboBox ItemsSource="{Binding MeasurementPlans}"
+                                  SelectedItem="{Binding NewMeasurementPlan}"
+                                  Visibility="{Binding MeasurementPlans, Converter={StaticResource MeasurementPlansToVisibilityVisibleConverter}}"
+                                  Grid.Row="0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding MeasurementPlan}"></TextBlock>
+                                        <TextBlock Text=" Свободно: "></TextBlock>
+                                        <TextBlock Text="{Binding Count}"></TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <TextBox Text="Отсутствуют даты..."
+                                 Visibility="{Binding MeasurementPlans, Converter={StaticResource MeasurementPlansToVisibilityHiddenConverter}}"
+                                 IsReadOnly="True"
+                                 Grid.Row="0"/>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Width="180"
+                            Margin="10,0,0,0"
+                            Visibility="{Binding NewMeasurementPlan, Converter={StaticResource NewMeasurementPlanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBlock Text="Установить новую дату и время замера"
+                           Height="20"/>
+                    <Button Content="Установить новую дату и время"
+                            Command="{Binding SaveCommand}"
+                            CommandParameter="{Binding NewMeasurementPlan}"/>
+                </StackPanel>
+                <StackPanel Width="180"
+                            Margin="10,0,0,0"
+                            Visibility="{Binding SelectBid.MeasurementPlan, Converter={StaticResource MeasurementPlanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBlock Text="Убрать дату и время замера"
+                           Height="20"/>
+                    <Button Content="Убрать дату и время"
+                            Command="{Binding DeleteCommand}"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel HorizontalAlignment="Center" 
+                    Orientation="Vertical"
+                    Grid.Row="2">
+            <TextBlock FontSize="24" 
+                       HorizontalAlignment="Center"
+                       Text="Заявки на замеры"/>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <CheckBox IsChecked="{Binding OnlyFreeBids}"></CheckBox>
+                <TextBlock FontSize="12"
+                           Text="Отображать только заявки без даты?"/>
+            </StackPanel>
+        </StackPanel>
+
+        <ListView ItemsSource="{Binding Bids}"
+                  SelectedItem="{Binding SelectBid}"
+                  Grid.Row="3">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ФИО" 
+                                    DisplayMemberBinding="{Binding FullName}"/>
+                    <GridViewColumn Header="Телефон" 
+                                    DisplayMemberBinding="{Binding Phone}"/>
+                    <GridViewColumn Header="Город" 
+                                    DisplayMemberBinding="{Binding City}"/>
+                    <GridViewColumn Header="Адрес" 
+                                    DisplayMemberBinding="{Binding Address}"/>
+                    <GridViewColumn Header="Дата и время замера" 
+                                    DisplayMemberBinding="{Binding MeasurementPlan, Converter={StaticResource BidMeasurementPlanToStringConverter}}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+    
+</Window>

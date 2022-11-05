@@ -1,0 +1,8 @@
+﻿<Application x:Class="MariaTest.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Main="clr-namespace:MariaTest">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>

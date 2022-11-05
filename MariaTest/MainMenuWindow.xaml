@@ -1,0 +1,45 @@
+﻿<Window x:Class="MariaTest.MainMenuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MariaTest"
+        mc:Ignorable="d"
+        Title="Главное меню" Height="600" Width="800">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="300"/>
+            <RowDefinition Height="200"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Grid.Row="0">
+            <TextBlock FontSize="24" 
+                       Text="Рабочее место диспетчера по замерам"/>
+        </StackPanel>
+        
+        <StackPanel HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Grid.Row="1">
+            <Button Content="Рассмотреть заявки"
+                    Width="600"
+                    Height="240"
+                    FontSize="24"
+                    Command="{Binding OpenDispatcherCommand}"/>
+        </StackPanel>
+        
+        <StackPanel HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Grid.Row="2">
+            <Button Content="Указать количество замеров (не для диспетчера)"
+                    IsEnabled="False"
+                    Width="600"
+                    Height="80"
+                    FontSize="24"/>
+        </StackPanel>
+    </Grid>
+    
+</Window>

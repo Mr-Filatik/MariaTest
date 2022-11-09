@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MariaTest.Models
+﻿namespace MariaTest.Models
 {
+    /// <summary>
+    /// Class for describing plans for measurements and the number of free places
+    /// </summary>
     public class MeasurementPlanWithFreeCount
     {
         public MeasurementPlan MeasurementPlan { get; set; }

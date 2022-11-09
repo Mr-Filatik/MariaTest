@@ -3,13 +3,13 @@ using MariaTest.Models;
 using MariaTestTask.Model;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MariaTest.Data.Local
 {
+    /// <summary>
+    /// Class for accessing local data
+    /// </summary>
     public class LocalData : IDispatcherble
     {
         private List<Bid> _bids;
@@ -19,16 +19,17 @@ namespace MariaTest.Data.Local
         {
             _measurementPlans = new List<MeasurementPlan>()
             {
-                new MeasurementPlan(){ Id = 1, City = "Саратов", Date = new DateTime(2022, 11, 7), TimeInterval = TimeInterval.AllDay, Amount = 2 },
-                new MeasurementPlan(){ Id = 2, City = "Саратов", Date = new DateTime(2022, 11, 8), TimeInterval = TimeInterval.AllDay, Amount = 2 },
-                new MeasurementPlan(){ Id = 3, City = "Москва", Date = new DateTime(2022, 11, 7), TimeInterval = TimeInterval.From10To12, Amount = 2 },
-                new MeasurementPlan(){ Id = 4, City = "Москва", Date = new DateTime(2022, 11, 7), TimeInterval = TimeInterval.From12To14, Amount = 2 },
+                new MeasurementPlan(){ Id = 1, City = "Саратов", Date = new DateTime(2022, 11, 10), TimeInterval = TimeInterval.AllDay, Amount = 2 },
+                new MeasurementPlan(){ Id = 2, City = "Саратов", Date = new DateTime(2022, 11, 15), TimeInterval = TimeInterval.AllDay, Amount = 2 },
+                new MeasurementPlan(){ Id = 3, City = "Саратов", Date = new DateTime(2022, 11, 16), TimeInterval = TimeInterval.AllDay, Amount = 2 },
+                new MeasurementPlan(){ Id = 4, City = "Москва", Date = new DateTime(2022, 11, 15), TimeInterval = TimeInterval.From10To12, Amount = 2 },
+                new MeasurementPlan(){ Id = 5, City = "Москва", Date = new DateTime(2022, 11, 15), TimeInterval = TimeInterval.From12To14, Amount = 2 }
             };
             _bids = new List<Bid>()
             {
                 new Bid(){ Id = 1, City = "Саратов", Address = "ул. Б. Садовая, д. 104", FullName = "Филатов В.П.", Phone = "+7(937)021-16-53", MeasurementPlan = null },
                 new Bid(){ Id = 2, City = "Саратов", Address = "ул. Б. Садовая, д. 103", FullName = "Филатов В.А.", Phone = "+7(937)021-17-53", MeasurementPlan = null },
-                new Bid(){ Id = 3, City = "Саратов", Address = "ул. Б. Садовая, д. 105", FullName = "Филатов В.Р.", Phone = "+7(937)021-16-59", MeasurementPlan = null },
+                new Bid(){ Id = 3, City = "Саратов", Address = "ул. Б. Садовая, д. 105", FullName = "Филатов В.Р.", Phone = "+7(937)021-16-59", MeasurementPlan = _measurementPlans[1] },
                 new Bid(){ Id = 4, City = "Саратов", Address = "ул. Б. Садовая, д. 101", FullName = "Филатов В.B.", Phone = "+7(937)021-16-54", MeasurementPlan = null },
                 new Bid(){ Id = 5, City = "Саратов", Address = "ул. Б. Садовая, д. 102", FullName = "Филатов В.C.", Phone = "+7(937)021-16-55", MeasurementPlan = _measurementPlans[0] },
                 new Bid(){ Id = 6, City = "Самара", Address = "ул. Городская, д. 10", FullName = "Филатов В.Е.", Phone = "+7(937)021-16-58", MeasurementPlan = null },
@@ -43,7 +44,7 @@ namespace MariaTest.Data.Local
             _bids = bids;
         }
 
-        public List<Bid> GetNewBids(bool onlyBlank = true)
+        public List<Bid> GetBids(bool onlyBlank = true, bool withOld = false)
         {
             List<Bid> bids = new List<Bid>();
             if (onlyBlank)
@@ -52,7 +53,14 @@ namespace MariaTest.Data.Local
             }
             else
             {
-                bids = _bids.Where(x => x.MeasurementPlan == null || x.MeasurementPlan?.Date > DateTime.Now).ToList();
+                if (withOld)
+                {
+                    bids = _bids.ToList();
+                }
+                else
+                {
+                    bids = _bids.Where(x => x.MeasurementPlan == null || x.MeasurementPlan?.Date > DateTime.Now).ToList();
+                }
             }
             return bids;
         }
@@ -73,14 +81,17 @@ namespace MariaTest.Data.Local
             List<MeasurementPlan> plans = _measurementPlans.Where(x => x.City == city).ToList();
             foreach (var item in plans)
             {
-                int count = GetCountByMeasurementPlan(item);
-                if (item.Amount > count)
+                if (item.Date > DateTime.Now)
                 {
-                    result.Add(new MeasurementPlanWithFreeCount()
+                    int count = GetCountByMeasurementPlan(item);
+                    if (item.Amount > count)
                     {
-                        MeasurementPlan = item,
-                        Count = item.Amount - count
-                    });
+                        result.Add(new MeasurementPlanWithFreeCount()
+                        {
+                            MeasurementPlan = item,
+                            Count = item.Amount - count
+                        });
+                    }
                 }
             }
             return result;

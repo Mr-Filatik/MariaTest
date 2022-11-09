@@ -9,11 +9,12 @@
         mc:Ignorable="d"
         Title="DispatcherWindow" Height="450" Width="800">
     
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <ViewModels:DispatcherViewModel/>
-    </Window.DataContext>
+    </Window.DataContext>-->
     
     <Window.Resources>
+        <Converters:BoolOnlyFreeBidsToVisibilityConverter x:Key="BoolOnlyFreeBidsToVisibilityConverter"/>
         <Converters:SelectedBidToVisibilityConverter x:Key="SelectedBidToVisibilityConverter"/>
         <Converters:BidMeasurementPlanToStringConverter x:Key="BidMeasurementPlanToStringConverter"/>
         <Converters:MeasurementPlanToVisibilityConverter x:Key="MeasurementPlanToVisibilityConverter"/>
@@ -30,12 +31,16 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel HorizontalAlignment="Center" 
-                    VerticalAlignment="Center"
-                    Grid.Row="0">
+        <Grid VerticalAlignment="Center" 
+              Grid.Row="0"
+              Margin="10,10,10,10">
             <TextBlock FontSize="24" 
-                       Text="Рабочее место диспетчера по замерам"/>
-        </StackPanel>
+                       Text="Рабочее место диспетчера по замерам"
+                       HorizontalAlignment="Left"/>
+            <Button Content="Вернуться в главное меню"
+                    HorizontalAlignment="Right"
+                    Command="{Binding CloseWindowCommand}"/>
+        </Grid>
 
         <StackPanel Orientation="Vertical"
                     Grid.Row="1"
@@ -116,9 +121,8 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <TextBox Text="Отсутствуют даты..."
+                        <TextBlock Text="Отсутствуют даты..."
                                  Visibility="{Binding MeasurementPlans, Converter={StaticResource MeasurementPlansToVisibilityHiddenConverter}}"
-                                 IsReadOnly="True"
                                  Grid.Row="0"/>
                     </Grid>
                 </StackPanel>
@@ -142,19 +146,29 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel HorizontalAlignment="Center" 
-                    Orientation="Vertical"
-                    Grid.Row="2">
+        <Grid VerticalAlignment="Center" 
+              Grid.Row="2"
+              Margin="10,10,10,10">
             <TextBlock FontSize="24" 
-                       HorizontalAlignment="Center"
+                       HorizontalAlignment="Left"
                        Text="Заявки на замеры"/>
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center">
-                <CheckBox IsChecked="{Binding OnlyFreeBids}"></CheckBox>
-                <TextBlock FontSize="12"
+            <StackPanel Orientation="Vertical"
+                        HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Left">
+                    <CheckBox IsChecked="{Binding OnlyFreeBids}"></CheckBox>
+                    <TextBlock FontSize="12"
                            Text="Отображать только заявки без даты?"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Left"
+                            Visibility="{Binding OnlyFreeBids, Converter={StaticResource BoolOnlyFreeBidsToVisibilityConverter}}">
+                    <CheckBox IsChecked="{Binding WithOldBids}"></CheckBox>
+                    <TextBlock FontSize="12"
+                           Text="Отображать наступившие дни (включая сегодня и все прошедшие)?"/>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
+        </Grid>
 
         <ListView ItemsSource="{Binding Bids}"
                   SelectedItem="{Binding SelectBid}"

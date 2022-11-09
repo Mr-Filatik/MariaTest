@@ -6,7 +6,15 @@
         xmlns:local="clr-namespace:MariaTest"
         mc:Ignorable="d"
         Title="Главное меню" Height="600" Width="800">
-    
+
+    <!--<Window.DataContext>
+        <ViewModels:MainMenuViewModel/>
+    </Window.DataContext>-->
+
+    <Window.Resources>
+        
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -18,7 +26,7 @@
                     VerticalAlignment="Center" 
                     Grid.Row="0">
             <TextBlock FontSize="24" 
-                       Text="Рабочее место диспетчера по замерам"/>
+                       Text="Приложение для управления заявками на замер"/>
         </StackPanel>
         
         <StackPanel HorizontalAlignment="Center" 
@@ -27,18 +35,25 @@
             <Button Content="Рассмотреть заявки"
                     Width="600"
                     Height="240"
-                    FontSize="24"
+                    FontSize="36"
                     Command="{Binding OpenDispatcherCommand}"/>
         </StackPanel>
         
         <StackPanel HorizontalAlignment="Center" 
                     VerticalAlignment="Center" 
                     Grid.Row="2">
-            <Button Content="Указать количество замеров (не для диспетчера)"
-                    IsEnabled="False"
+            <Button IsEnabled="False"
                     Width="600"
                     Height="80"
-                    FontSize="24"/>
+                    >
+                <StackPanel>
+                    <TextBlock Text="* Не включено в задание"
+                               FontSize="16"
+                               HorizontalAlignment="Right"/>
+                    <TextBlock Text="Указать количество замеров (не для диспетчера)"
+                               FontSize="24"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
     </Grid>
     

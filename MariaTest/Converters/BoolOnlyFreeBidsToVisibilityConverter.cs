@@ -2,22 +2,22 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows;
-using MariaTest.Models;
+using MariaTestTask.Model;
 
 namespace MariaTest.Converters
 {
     /// <summary>
-    /// Class for converting object to visibility
+    /// Class to convert OnlyFreeBids field value to visibility
     /// </summary>
-    internal class NewMeasurementPlanToVisibilityConverter : IValueConverter
+    public class BoolOnlyFreeBidsToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((MeasurementPlanWithFreeCount?)value == null)
+            if ((bool?)value == false)
             {
-                return Visibility.Hidden;
+                return Visibility.Visible;
             }
-            return Visibility.Visible;
+            return Visibility.Hidden;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

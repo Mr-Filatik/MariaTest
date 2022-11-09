@@ -5,22 +5,27 @@ using MariaTestTask.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using System.Windows;
 
 namespace MariaTest.ViewModels
 {
-    public class DispatcherViewModel : INotifyPropertyChanged
+    /// <summary>
+    /// ViewModel for DispatcherWindow
+    /// </summary>
+    public class DispatcherViewModel : ViewModel, INotifyPropertyChanged
     {
         public IDispatcherble Context { get; init; }
+
         public DispatcherViewModel()
         {
             Context = ((App)Application.Current).Context;
             OnlyFreeBids = true;
+            WithOldBids = false;
         }
+
+        #region Properties for display data
 
         private bool _onlyFreeBids;
         public bool OnlyFreeBids
@@ -34,6 +39,21 @@ namespace MariaTest.ViewModels
                 _onlyFreeBids = value;
                 RefreshData();
                 OnPropertyChanged("OnlyFreeBids");
+            }
+        }
+
+        private bool _withOldBids;
+        public bool WithOldBids
+        {
+            get
+            {
+                return _withOldBids;
+            }
+            set
+            {
+                _withOldBids = value;
+                RefreshData();
+                OnPropertyChanged("WithOldBids");
             }
         }
 
@@ -97,6 +117,17 @@ namespace MariaTest.ViewModels
             }
         }
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string name = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        #endregion
+
+        #region Button Commands
+
         private ButtonCommand? _saveCommand;
         public ButtonCommand SaveCommand
         {
@@ -131,6 +162,38 @@ namespace MariaTest.ViewModels
             }
         }
 
+        private ButtonCommand? _closeWindowCommand;
+        public ButtonCommand CloseWindowCommand
+        {
+            get
+            {
+                return _closeWindowCommand ??
+                  (_closeWindowCommand = new ButtonCommand(obj =>
+                  {
+                      ((App)Application.Current).OpenMainMenuWindow(CloseWindow);
+                      //((App)Application.Current).OpenWindow<DispatcherWindow, DispatcherViewModel>(CloseWindow);
+                  }));
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Method for refresh data from Context
+        /// </summary>
+        public void RefreshData()
+        {
+            Bids = Context.GetBids(OnlyFreeBids, WithOldBids);
+            SelectBid = null;
+            NewMeasurementPlan = null;
+        }
+
+        /// <summary>
+        /// Method for obtaining measurement plans for a selected city
+        /// </summary>
+        /// <returns>List of measurement plans with the number of free</returns>
         public List<MeasurementPlanWithFreeCount> GetMeasurementPlans()
         {
             if (SelectBid != null)
@@ -140,18 +203,6 @@ namespace MariaTest.ViewModels
             return new List<MeasurementPlanWithFreeCount>();
         }
 
-        public void RefreshData()
-        {
-            Bids = Context.GetNewBids(OnlyFreeBids);
-            SelectBid = null;
-            NewMeasurementPlan = null;
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        public void OnPropertyChanged([CallerMemberName] string name = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
+        #endregion
     }
 }

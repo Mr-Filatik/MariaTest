@@ -11,6 +11,9 @@ using Xunit;
 
 namespace MariaTest.Tests
 {
+    /// <summary>
+    /// Class for testing data access methods
+    /// </summary>
     public class LocalDataTest
     {
         [Fact]
@@ -19,11 +22,15 @@ namespace MariaTest.Tests
             IDispatcherble context = new LocalData();
             List<Bid> bids = null;
 
-            bids = context.GetNewBids(true);
+            bids = context.GetBids(true);
 
             Assert.NotNull(bids);
 
-            bids = context.GetNewBids(false);
+            bids = context.GetBids(false, false);
+
+            Assert.NotNull(bids);
+
+            bids = context.GetBids(false, true);
 
             Assert.NotNull(bids);
         }

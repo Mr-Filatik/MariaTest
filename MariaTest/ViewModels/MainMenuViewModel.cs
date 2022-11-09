@@ -1,15 +1,15 @@
 ﻿using MariaTestTask.Comands;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 
 namespace MariaTest.ViewModels
 {
-    public class MainMenuViewModel
+    /// <summary>
+    /// ViewModel for MainMenuWindow
+    /// </summary>
+    public class MainMenuViewModel : ViewModel
     {
-        public Action? CloseWindow { get; set; }
+        #region Button Commands
 
         private ButtonCommand? _openDispatcherCommand;
         public ButtonCommand OpenDispatcherCommand
@@ -19,11 +19,12 @@ namespace MariaTest.ViewModels
                 return _openDispatcherCommand ??
                   (_openDispatcherCommand = new ButtonCommand(obj =>
                   {
-                      DispatcherWindow window = new DispatcherWindow();
-                      window.Show();
-                      CloseWindow?.Invoke();
+                      ((App)Application.Current).OpenDispatcherWindow(CloseWindow);
+                      //((App)Application.Current).OpenWindow<MainMenuWindow, MainMenuViewModel>(closeWindow);
                   }));
             }
         }
+
+        #endregion
     }
 }

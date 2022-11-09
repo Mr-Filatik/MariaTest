@@ -1,12 +1,10 @@
 ﻿using MariaTest.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MariaTestTask.Model
 {
+    /// <summary>
+    /// Class for describing measurement requests
+    /// </summary>
     public class Bid
     {
         public int Id { get; set; }

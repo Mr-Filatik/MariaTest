@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MariaTestTask.Comands
 {
+    /// <summary>
+    /// Class for creating commands for buttons in a MVVM application
+    /// </summary>
     public class ButtonCommand : ICommand
     {
         private Action<object> execute;

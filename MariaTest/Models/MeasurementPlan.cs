@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MariaTest.Models
 {
+    /// <summary>
+    /// Class for describing plans and number of measurements
+    /// </summary>
     public class MeasurementPlan
     {
         public int Id { get; set; }
@@ -35,6 +34,9 @@ namespace MariaTest.Models
         }
     }
 
+    /// <summary>
+    /// Enumeration for setting sampling time intervals
+    /// </summary>
     public enum TimeInterval
     {
         AllDay,

@@ -9,11 +9,11 @@ namespace MariaTest.Converters
     /// <summary>
     /// Class for converting object to visibility
     /// </summary>
-    internal class NewMeasurementPlanToVisibilityConverter : IValueConverter
+    internal class ObjectToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((MeasurementPlanWithFreeCount?)value == null)
+            if (value == null)
             {
                 return Visibility.Hidden;
             }

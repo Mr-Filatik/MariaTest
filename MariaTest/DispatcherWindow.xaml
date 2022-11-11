@@ -14,11 +14,9 @@
     </Window.DataContext>-->
     
     <Window.Resources>
-        <Converters:BoolOnlyFreeBidsToVisibilityConverter x:Key="BoolOnlyFreeBidsToVisibilityConverter"/>
-        <Converters:SelectedBidToVisibilityConverter x:Key="SelectedBidToVisibilityConverter"/>
+        <Converters:BoolToVisibilityReverseConverter x:Key="BoolToVisibilityReverseConverter"/>
         <Converters:BidMeasurementPlanToStringConverter x:Key="BidMeasurementPlanToStringConverter"/>
-        <Converters:MeasurementPlanToVisibilityConverter x:Key="MeasurementPlanToVisibilityConverter"/>
-        <Converters:NewMeasurementPlanToVisibilityConverter x:Key="NewMeasurementPlanToVisibilityConverter"/>
+        <Converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter"/>
         <Converters:MeasurementPlansToVisibilityHiddenConverter x:Key="MeasurementPlansToVisibilityHiddenConverter"/>
         <Converters:MeasurementPlansToVisibilityVisibleConverter x:Key="MeasurementPlansToVisibilityVisibleConverter"/>
     </Window.Resources>
@@ -44,7 +42,7 @@
 
         <StackPanel Orientation="Vertical"
                     Grid.Row="1"
-                    Visibility="{Binding SelectBid, Converter={StaticResource SelectedBidToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                    Visibility="{Binding SelectBid, Converter={StaticResource ObjectToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
             <StackPanel Orientation="Horizontal"
                         Height="50"
                         DataContext="{Binding SelectBid}">
@@ -128,7 +126,7 @@
                 </StackPanel>
                 <StackPanel Width="180"
                             Margin="10,0,0,0"
-                            Visibility="{Binding NewMeasurementPlan, Converter={StaticResource NewMeasurementPlanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                            Visibility="{Binding NewMeasurementPlan, Converter={StaticResource ObjectToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
                     <TextBlock Text="Установить новую дату и время замера"
                            Height="20"/>
                     <Button Content="Установить новую дату и время"
@@ -137,7 +135,7 @@
                 </StackPanel>
                 <StackPanel Width="180"
                             Margin="10,0,0,0"
-                            Visibility="{Binding SelectBid.MeasurementPlan, Converter={StaticResource MeasurementPlanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                            Visibility="{Binding SelectBid.MeasurementPlan, Converter={StaticResource ObjectToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
                     <TextBlock Text="Убрать дату и время замера"
                            Height="20"/>
                     <Button Content="Убрать дату и время"
@@ -162,7 +160,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Left"
-                            Visibility="{Binding OnlyFreeBids, Converter={StaticResource BoolOnlyFreeBidsToVisibilityConverter}}">
+                            Visibility="{Binding OnlyFreeBids, Converter={StaticResource BoolToVisibilityReverseConverter}}">
                     <CheckBox IsChecked="{Binding WithOldBids}"></CheckBox>
                     <TextBlock FontSize="12"
                            Text="Отображать наступившие дни (включая сегодня и все прошедшие)?"/>

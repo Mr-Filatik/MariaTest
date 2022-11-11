@@ -7,17 +7,17 @@ using MariaTestTask.Model;
 namespace MariaTest.Converters
 {
     /// <summary>
-    /// Class for converting object to visibility
+    /// Class to convert bool value to visibility (reverse)
     /// </summary>
-    public class SelectedBidToVisibilityConverter : IValueConverter
+    public class BoolToVisibilityReverseConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((Bid?)value == null)
+            if ((bool?)value == false)
             {
-                return Visibility.Hidden;
+                return Visibility.Visible;
             }
-            return Visibility.Visible;
+            return Visibility.Hidden;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
